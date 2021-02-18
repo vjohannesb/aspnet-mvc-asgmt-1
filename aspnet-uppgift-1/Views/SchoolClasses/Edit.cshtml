@@ -1,0 +1,45 @@
+﻿@model aspnet_uppgift_1.Models.SchoolClassViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>SchoolClass</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control"/>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Students" class="control-label"></label>
+                @Html.ListBoxFor(m => m.StudentIds, new SelectList(Model.AllStudents, "Id", "DisplayName"), new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Teacher" class="control-label"></label>
+                @Html.DropDownListFor(model => model.TeacherId, new SelectList(Model.AllTeachers, "Id", "DisplayName"), "Select teacher", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.TeacherId, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

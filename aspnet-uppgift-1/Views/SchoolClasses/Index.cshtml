@@ -1,0 +1,48 @@
+﻿@model IEnumerable<aspnet_uppgift_1.Models.SchoolClassViewModel>
+
+@{
+    ViewData["Title"] = "Class list";
+}
+
+<h1>Class list</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Create New</a>
+</p>
+
+<p class="text-black-50">Edit a class to add users and assign a teacher.</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                Students
+            </th>
+            <th>
+                Teacher
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+
+                <td>@(item.Students?.Count.ToString() ?? "Null")</td>
+                <td>@(item.Teacher?.DisplayName ?? "Not assigned")</td>
+
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
