@@ -24,8 +24,8 @@ namespace aspnet_uppgift_1.Data
         [Column(TypeName = "nvarchar(50)")]
         public string ImageURI { get; set; }
 
-        public int? SchoolClassId { get; set; }
-        public SchoolClass SchoolClass { get; set; }
+        [Column(TypeName = "nvarchar(50)")]
+        public string Role { get; set; }
 
         [NotMapped]
         public string DisplayName => $"{FirstName} {LastName}"; 

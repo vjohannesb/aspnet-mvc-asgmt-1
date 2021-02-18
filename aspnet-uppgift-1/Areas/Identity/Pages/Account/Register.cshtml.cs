@@ -80,10 +80,15 @@ namespace aspnet_uppgift_1.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task<RedirectResult> OnGetAsync(string returnUrl = null)
         {
+            var _admins = await _userManager.GetUsersInRoleAsync("Admin");
+            if (_admins.Any())
+                return Redirect("/");
+
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            return null;
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)

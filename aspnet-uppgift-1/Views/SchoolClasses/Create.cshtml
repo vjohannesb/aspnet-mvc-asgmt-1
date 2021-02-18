@@ -1,12 +1,12 @@
-﻿@model aspnet_uppgift_1.Models.SchoolClass
+﻿@model aspnet_uppgift_1.Models.SchoolClassViewModel
 
 @{
-    ViewData["Title"] = "New class";
+    ViewData["Title"] = "Create";
 }
 
 <h1>Create</h1>
 
-<h4>New class</h4>
+<h4>SchoolClass</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -16,6 +16,11 @@
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TeacherId" class="control-label"></label>
+                @Html.DropDownListFor(m => m.TeacherId, new SelectList(SchoolClassViewModel.AllTeachers, "Id", "DisplayName"), "Select a teacher", new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.TeacherId, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

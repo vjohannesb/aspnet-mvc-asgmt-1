@@ -79,8 +79,9 @@ namespace aspnet_uppgift_1
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute(
-                    name: "Users",
-                    pattern: "{controller=AdminUsers}/");
+                    name: "NotFound",
+                    pattern: "{*url}",
+                    new { controller = "Home", action = "Error" });
                 endpoints.MapRazorPages();
             });
         }

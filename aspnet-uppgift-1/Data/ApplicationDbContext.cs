@@ -16,5 +16,6 @@ namespace aspnet_uppgift_1.Data
 
         public DbSet<SchoolClass> SchoolClasses { get; set; }
 
+        public DbSet<SchoolClassStudent> SchoolClassStudents { get; set; }
     }
 }

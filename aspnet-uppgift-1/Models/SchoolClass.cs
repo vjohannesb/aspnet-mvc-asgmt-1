@@ -17,7 +17,7 @@ namespace aspnet_uppgift_1.Models
         [Required]
         public string Name { get; set; }
 
-        public ApplicationUser Teacher { get; set; }
+        public string TeacherId { get; set; }
 
         public virtual ICollection<SchoolClassStudent> SchoolClassStudents { get; set; }
 

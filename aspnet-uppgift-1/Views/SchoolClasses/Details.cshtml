@@ -1,24 +1,46 @@
-﻿@model aspnet_uppgift_1.Models.SchoolClass
+﻿@model aspnet_uppgift_1.Models.SchoolClassViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Class details";
 }
 
-<h1>Details</h1>
+<div id="class-list" class="bg-light">
+    <div class="row">
+        <h1>@Model.Name</h1>
+    </div>
 
-<div>
-    <h4>SchoolClass</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+        @if (Model.Teacher != null)
+        {
+            <div class="col mb-3">
+                <div class="user-card teacher">
+                    <img src="img/@(Model.Teacher.ImageURI?? "150.jpg")" alt="Profile picture for @Model.Teacher.DisplayName">
+                    <div class="user-card-box">
+                        <h5>@Model.Teacher.DisplayName</h5>
+                        <p class="user-role">@Model.Teacher.Role</p>
+                        <p class="user-company">
+                            @Model.Name
+                        </p>
+                    </div>
+                    <div class="blob"></div>
+                </div>
+            </div>
+        }
+        @foreach (var student in Model.Students)
+        {
+            <div class="col mb-3">
+                <div class="user-card student">
+                    <img src="img/@(student.ImageURI ?? "150.jpg")" alt="Profile picture for @student.DisplayName">
+                    <div class="user-card-box">
+                        <h5>@student.DisplayName</h5>
+                        <p class="user-role">@student.Role</p>
+                        <p class="user-company">
+                            EPN Sverige AB
+                        </p>
+                    </div>
+                    <div class="blob"></div>
+                </div>
+            </div>
+        }
+    </div>
 </div>

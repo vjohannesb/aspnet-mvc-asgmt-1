@@ -15,19 +15,22 @@
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control"/>
+                <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-
             <div class="form-group">
-                <label asp-for="Students" class="control-label"></label>
-                @Html.ListBoxFor(m => m.StudentIds, new SelectList(Model.AllStudents, "Id", "DisplayName"), new { @class = "form-control" })
+                <label asp-for="TeacherId" class="control-label">
+                    @Html.DisplayNameFor(model => model.Teacher)
+                </label>
+                @Html.DropDownListFor(m => m.TeacherId, new SelectList(SchoolClassViewModel.AllTeachers, "Id", "DisplayName"), "Select a teacher", new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.TeacherId, "", new { @class = "text-danger" })
             </div>
-
             <div class="form-group">
-                <label asp-for="Teacher" class="control-label"></label>
-                @Html.DropDownListFor(model => model.TeacherId, new SelectList(Model.AllTeachers, "Id", "DisplayName"), "Select teacher", new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.TeacherId, "", new { @class = "text-danger" })
+                <label asp-for="StudentIds" class="control-label">
+                    @Html.DisplayNameFor(model => model.Students)
+                </label>
+                @Html.ListBoxFor(m => m.StudentIds, new MultiSelectList(SchoolClassViewModel.AllStudents, "Id", "DisplayName", Model.StudentIds), new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.StudentIds, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

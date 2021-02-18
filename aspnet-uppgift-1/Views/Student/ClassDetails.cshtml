@@ -1,0 +1,19 @@
+﻿@model aspnet_uppgift_1.Models.SchoolClassViewModel
+
+<div class="container">
+    <div class="row">
+        <h1 class="col d-flex justify-content-center">@Model.Name</h1>
+    </div>
+
+    <div class="row">
+        @foreach (var student in Model.Students)
+        {
+            <div class="col">
+                <div class="card">
+                    <img src="~/img/150.png" class="card-img-top" alt="..." />
+                    <h5 class="card-title">@student.DisplayName</h5>
+                </div>
+            </div>
+        }
+    </div>
+</div>

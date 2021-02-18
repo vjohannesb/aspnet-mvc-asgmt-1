@@ -45,8 +45,9 @@ namespace aspnet_uppgift_1.Controllers
                 FirstName = userViewModel.FirstName,
                 LastName = userViewModel.LastName,
                 Email = userViewModel.Email,
-                ImageURI = userViewModel.ImageURI,
-                UserName = userViewModel.Email
+                ImageURI = new Random().Next(1, 7) + ".jpg",
+                UserName = userViewModel.Email,
+                Role = userViewModel.Role
             };
 
         // GET: UsersController
