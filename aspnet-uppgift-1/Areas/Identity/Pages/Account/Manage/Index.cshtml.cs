@@ -37,8 +37,8 @@ namespace aspnet_uppgift_1.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
-            [EmailAddress(ErrorMessage = "The e-mail address is not valid")]
             [Display(Name = "Email address")]
+            [EmailAddress(ErrorMessage = "The e-mail address is not valid.")]
             public string Email { get; set; }
 
             [EmailAddress]
@@ -61,9 +61,9 @@ namespace aspnet_uppgift_1.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                Email = user.Email,
-                ConfirmEmail = user.Email,
-                PhoneNumber = user.PhoneNumber,
+                Email = email,
+                ConfirmEmail = email,
+                PhoneNumber = phoneNumber,
             };
         }
 
@@ -96,25 +96,28 @@ namespace aspnet_uppgift_1.Areas.Identity.Pages.Account.Manage
 
             if (Input.Email != email)
             {
-                if (!_userManager.Users.Any(user => user.Email == Input.Email))
+                if (_userManager.Users.Any(user => user.Email == Input.Email))
                 {
-                    var setEmailResult = await _userManager.SetEmailAsync(user, Input.Email);
-                    if (!setEmailResult.Succeeded)
-                    {
-                        StatusMessage = "Error: Unexpected error when trying to update e-mail address.";
-                        return RedirectToPage();
-                    }
-
-                    await _signInManager.RefreshSignInAsync(user);
-                    StatusMessage = "Your profile has been updated";
+                    StatusMessage = "Error: This e-mail address is already registered.";
                     return RedirectToPage();
                 }
-                StatusMessage = "Error: This e-mail address is already registered.";
-                return RedirectToPage();
+
+                var setEmailResult = await _userManager.SetEmailAsync(user, Input.Email);
+                if (!setEmailResult.Succeeded)
+                {
+                    StatusMessage = "Error: Unexpected error when trying to update e-mail address.";
+                    return RedirectToPage();
+                }
             }
 
             if (Input.PhoneNumber != phoneNumber)
             {
+                if (_userManager.Users.Any(user => user.PhoneNumber == Input.PhoneNumber))
+                {
+                    StatusMessage = "Error: This phone number is already registered.";
+                    return RedirectToPage();
+                }
+
                 var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
                 if (!setPhoneResult.Succeeded)
                 {

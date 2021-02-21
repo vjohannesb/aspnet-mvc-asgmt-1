@@ -40,7 +40,8 @@ namespace aspnet_uppgift_1.Models
 
         public string Username { get; set; }
 
-        public SchoolClassViewModel SchoolClass { get; set; }
+        [Display(Name = "Class")]
+        public IEnumerable<SchoolClass> SchoolClasses { get; set; }
           
     }
 }

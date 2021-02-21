@@ -7,46 +7,77 @@
 <h1>Details</h1>
 
 <div>
-    <h4>UserViewModel</h4>
+    <h4>@Model.FirstName @Model.LastName</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Role)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Role)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageURI)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageURI)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Username)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Username)
-        </dd>
-    </dl>
+
+    <div class="row">
+        <div class="col-sm-8">
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.FirstName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.LastName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.LastName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Email)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Email)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Role)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Role)
+                </dd>
+
+                @if (Model.Role != "Admin")
+                {
+                    <dt class="col-sm-2">
+                        @(Model.SchoolClasses?.Count() > 1 ? "Classes" : "Class")
+                    </dt>
+
+                    <dd class="col-sm-10">
+                        @if (Model.SchoolClasses != null)
+                        {
+                            @foreach (var schoolClass in Model.SchoolClasses)
+                            {
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a asp-controller="SchoolClasses" asp-action="Details" 
+                                       asp-route-id="@schoolClass?.Id" class="d-block">
+                                        @schoolClass?.Name
+                                    </a>
+                                }
+                                else
+                                {
+                                    <p>@schoolClass?.Name</p>
+                                }
+                            }
+                        } 
+                        else
+                        {
+                            <span>None</span>
+                        }
+                    </dd>
+                }
+            </dl>
+        </div>
+
+        <div class="col-sm-4">
+            <img src="~/img/@Model.ImageURI" class="w-100"
+                 alt="Profile picture for @Model.FirstName @Model.LastName" />
+        </div>
+    </div>
+
+
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>

@@ -1,6 +1,7 @@
 ﻿using aspnet_uppgift_1.Data;
 using aspnet_uppgift_1.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,21 +11,27 @@ namespace aspnet_uppgift_1.Services.Identity
 {
     public class IdentityService : IIdentityService
     {
+        private readonly ILogger<IdentityService> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
         public IdentityService(
-            UserManager<ApplicationUser> userManager, 
-            RoleManager<IdentityRole> roleManager)
+            UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager, 
+            ILogger<IdentityService> logger)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _logger = logger;
         }
 
         public async Task CreateRootAccountAsync()
         {
-            if (!_userManager.Users.Any())
+            var _admins = await _userManager.GetUsersInRoleAsync("Admin");
+            if (!_admins.Any())
             {
+                _logger.LogInformation("No admin account found - creating one.");
+
                 var user = new ApplicationUser
                 {
                     FirstName = "Admin",

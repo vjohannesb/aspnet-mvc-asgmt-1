@@ -4,16 +4,99 @@
 
 header {
     position: relative;
-    z-index: 99;
+    z-index: 9;
 }
 
 .footer {
     background: white !important;
+    z-index: 99;
+}
+
+.form-control {
+    margin-bottom: 0.5rem;
+}
+
+.form-group {
+    margin-bottom: 0.5rem;
+}
+
+/* 
+#####################################
+        SchoolClass Details 
+#####################################
+*/
+
+#class-list {
+    color: black;
+    text-align: center;
+}
+
+#class-list h1 {
+    margin: 0;
+    font-weight: bold;
+}
+
+#class-list .user-card {
+    transition: transform 0.2s;
+}
+
+#class-list .user-card:hover {
+    transform: scale(1.05);
+}
+
+#class-list .user-card .blob {
+    width: 85%;
+    height: 9px;
+    background: rgb(249, 249, 249);
+    border-radius: 15px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 99;
+    top: -4px;
+}
+
+#class-list .user-card.teacher .blob {
+    background: #f77c56;
+}
+
+#class-list .user-card.teacher h5,
+#class-list .user-card.teacher .user-role {
+    color: white;
+}
+
+#class-list .user-card.teacher .user-card-box {
+    background: #ff5520;
+}
+
+#class-list .user-card img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: -70px;
+    -webkit-box-shadow: 0px 3px 15px -1px rgba(128, 128, 128, 0.25);
+    box-shadow: 0px 3px 15px -1px rgba(128, 128, 128, 0.25);
+}
+
+#class-list .user-card .user-card-box {
+    background: white;
+    border-radius: 10px;
+    padding-top: 90px;
+    padding-bottom: 1rem;
+    -webkit-box-shadow: 0px 3px 15px -1px rgba(100, 100, 100, 0.25);
+    box-shadow: 0px 3px 15px -1px rgba(100, 100, 100, 0.25);
+}
+
+#class-list .user-card .user-card-box h5 {
+    font-weight: bold;
+    margin-bottom: 0;
 }
 
 
-
-
+#class-list .user-card .user-card-box .user-company {
+    font-size: 0.9rem;
+    color: rgba(0, 0, 0, 0.35);
+    text-transform: uppercase;
+}
 
 
 
@@ -86,7 +169,7 @@ body {
   margin-bottom: 60px;
 }
 .footer {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
   white-space: nowrap;

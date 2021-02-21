@@ -273,6 +273,11 @@ namespace aspnet_uppgift_1.Controllers
         {
             var schoolClass = await _context.SchoolClasses.FindAsync(id);
             _context.SchoolClasses.Remove(schoolClass);
+
+            var schoolClassStudent = _context.SchoolClassStudents.Where(scs => scs.SchoolClassId == id);
+            foreach (var scs in schoolClassStudent)
+                _context.SchoolClassStudents.Remove(scs);
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

@@ -37,6 +37,18 @@
             </div>
         </form>
     </div>
+
+    <div class="col-md-7 p-2">
+        <h5>Enrolled students</h5>
+        <div class="row text-wrap row-cols-1 row-cols-sm-2 row-cols-md-4">
+            @foreach (var student in Model.Students)
+            {
+                <div class="col p-3">
+                    <span>@student.DisplayName</span>
+                </div>
+            }
+        </div>
+    </div>
 </div>
 
 <div>

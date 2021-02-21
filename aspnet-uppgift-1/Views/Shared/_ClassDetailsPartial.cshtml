@@ -1,0 +1,54 @@
+﻿@model aspnet_uppgift_1.Models.SchoolClassViewModel
+
+<div id="class-list" class="bg-light">
+    <div class="mb-4">
+        <h1>@Model.Name</h1>
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="m-2 btn btn-primary">Edit</a>
+        }
+    </div>
+    @if (Model.Teacher == null)
+    {
+        <h5>No teacher assigned</h5>
+    }
+    @if (!Model.Students.Any())
+    {
+        <h5>No students enrolled</h5>
+    }
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+        @if (Model.Teacher != null)
+        {
+            <div class="col mb-3">
+                <div class="user-card teacher">
+                    <img src="/img/@(Model.Teacher.ImageURI ?? "150.png")" alt="Profile picture for @Model.Teacher.DisplayName">
+                    <div class="user-card-box">
+                        <h5>@Model.Teacher.DisplayName</h5>
+                        <p class="user-role">@Model.Teacher.Role</p>
+                        <p class="user-company">
+                            @Model.Name
+                        </p>
+                    </div>
+                    <div class="blob"></div>
+                </div>
+            </div>
+        }
+        @foreach (var student in Model.Students)
+        {
+                <div class="col mb-3">
+                    <div class="user-card student">
+                        <img src="/img/@(student.ImageURI ?? "150.jpg")" alt="Profile picture for @student.DisplayName">
+                        <div class="user-card-box">
+                            <h5>@student.DisplayName</h5>
+                            <p class="user-role">@student.Role</p>
+                            <p class="user-company">
+                                @Model.Name
+                            </p>
+                        </div>
+                        <div class="blob"></div>
+                    </div>
+                </div>
+        }
+    </div>
+</div>

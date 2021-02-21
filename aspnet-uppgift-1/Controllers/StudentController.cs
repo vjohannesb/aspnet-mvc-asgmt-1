@@ -103,5 +103,10 @@ namespace aspnet_uppgift_1.Controllers
             return View();
         }
 
+        public IActionResult Internship()
+        {
+            return View();
+        }
+
     }
 }

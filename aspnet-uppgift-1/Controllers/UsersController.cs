@@ -16,17 +16,21 @@ namespace aspnet_uppgift_1.Controllers
     public class UsersController : Controller
     {
         private readonly IIdentityService _identityService;
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly Random rnd = new Random();
 
         public UsersController(
             IIdentityService identityService,
-            UserManager<ApplicationUser> userManager, 
-            RoleManager<IdentityRole> roleManager)
+            UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager, 
+            ApplicationDbContext context)
         {
             _identityService = identityService;
             _userManager = userManager;
             _roleManager = roleManager;
+            _context = context;
         }
 
         public async Task<UserViewModel> GetUserViewModelAsync(string id)
@@ -45,7 +49,7 @@ namespace aspnet_uppgift_1.Controllers
                 FirstName = userViewModel.FirstName,
                 LastName = userViewModel.LastName,
                 Email = userViewModel.Email,
-                ImageURI = new Random().Next(1, 7) + ".jpg",
+                ImageURI = rnd.Next(1, 7) + ".jpg",
                 UserName = userViewModel.Email,
                 Role = userViewModel.Role
             };
@@ -54,9 +58,8 @@ namespace aspnet_uppgift_1.Controllers
         public async Task<ActionResult> Index(string filter)
         {
             var userViewModels = await _identityService.GetAllUserViewModelsAsync();
-            filter = filter?.ToLower() ?? string.Empty;
 
-            switch (filter)
+            switch (filter?.ToLower() ?? string.Empty)
             {
                 case "teachers":
                     userViewModels = userViewModels.Where(user => user.Role == "Teacher");
@@ -74,6 +77,17 @@ namespace aspnet_uppgift_1.Controllers
         public async Task<ActionResult> Details(string id)
         {
             var userViewModel = await GetUserViewModelAsync(id);
+            if (userViewModel.Role == "Student")
+            {
+                var classId = _context.SchoolClassStudents
+                    .FirstOrDefault(scs => scs.StudentId == id)?
+                    .SchoolClassId;
+
+                userViewModel.SchoolClasses = new List<SchoolClass> { await _context.SchoolClasses.FindAsync(classId) };
+            }
+            else if (userViewModel.Role == "Teacher")
+                userViewModel.SchoolClasses = _context.SchoolClasses.Where(sc => sc.TeacherId == id);
+            
             return View(userViewModel);
         }
 
@@ -136,7 +150,8 @@ namespace aspnet_uppgift_1.Controllers
                     user.FirstName = userViewModel.FirstName;
                     user.LastName = userViewModel.LastName;
                     user.Email = userViewModel.Email;
-                    user.ImageURI = userViewModel.ImageURI;
+                    user.UserName = userViewModel.Email;
+                    //user.ImageURI = userViewModel.ImageURI;
                     var newRole = userViewModel.Role;
 
                     if (newRole != oldRole)
@@ -170,6 +185,14 @@ namespace aspnet_uppgift_1.Controllers
             var result = await _identityService.DeleteUserAsync(id);
             if (result == null || !result.Succeeded)
                 throw new InvalidOperationException($"Unexpected error occurred deleting user with ID '{id}'.");
+
+            var schoolClassStudent = _context.SchoolClassStudents.FirstOrDefault(scs => scs.StudentId == id);
+            if (schoolClassStudent != null)
+            {
+                _context.SchoolClassStudents.Remove(schoolClassStudent);
+                await _context.SaveChangesAsync();
+            }
+
 
             return RedirectToAction("Index");
         }
