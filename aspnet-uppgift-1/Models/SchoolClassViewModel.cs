@@ -25,6 +25,7 @@ namespace aspnet_uppgift_1.Models
         // För att skicka med valda studenter + vald lärare i HttpPost
         public IEnumerable<string> StudentIds { get; set; }
 
+        [Display(Name = "Teacher")]
         public string TeacherId { get; set; }
 
 

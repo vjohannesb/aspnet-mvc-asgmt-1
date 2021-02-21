@@ -103,7 +103,8 @@ namespace aspnet_uppgift_1.Areas.Identity.Pages.Account.Manage
                 }
 
                 var setEmailResult = await _userManager.SetEmailAsync(user, Input.Email);
-                if (!setEmailResult.Succeeded)
+                var setUserNameResult = await _userManager.SetUserNameAsync(user, Input.Email);
+                if (!setEmailResult.Succeeded || !setUserNameResult.Succeeded)
                 {
                     StatusMessage = "Error: Unexpected error when trying to update e-mail address.";
                     return RedirectToPage();

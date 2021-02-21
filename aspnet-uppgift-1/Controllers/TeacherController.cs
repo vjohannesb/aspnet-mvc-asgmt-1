@@ -1,7 +1,6 @@
 ﻿using aspnet_uppgift_1.Data;
 using aspnet_uppgift_1.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,22 +10,19 @@ using System.Threading.Tasks;
 
 namespace aspnet_uppgift_1.Controllers
 {
-    [Authorize(Policy = "Users")]
-    public class StudentController : Controller
+    [Authorize("Teachers")]
+    public class TeacherController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
 
-
-        public StudentController(
+        public TeacherController(
             ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _userManager = userManager;
-            _roleManager = roleManager;
         }
 
         public async Task<IEnumerable<ApplicationUser>> GetUsersFromIdAsync(List<string> ids)
@@ -46,40 +42,35 @@ namespace aspnet_uppgift_1.Controllers
             return View();
         }
 
-        // GET: Student/Classes
+        // GET: Teacher/Classes
         public async Task<IActionResult> Classes()
         {
             var user = await _userManager.GetUserAsync(User);
 
-            if (user.Role == "Teacher")
-                return RedirectToAction("Classes", "Teacher");
+            if (user.Role == "Student")
+                return RedirectToAction("Classes", "Student");
 
-            var enrolledIn = _context.SchoolClassStudents
-                .Where(scs => scs.StudentId == user.Id)
-                .Select(scs => scs.SchoolClass).ToList();
+
+            var enrolledIn = _context.SchoolClasses
+                .Where(sc => sc.TeacherId == user.Id);
 
             var viewModels = new List<SchoolClassViewModel>();
 
             foreach (var schoolClass in enrolledIn)
             {
-                var otherStudentIds = _context.SchoolClassStudents
-                    .Where(scs => scs.SchoolClassId == schoolClass.Id)
-                    .Select(scs => scs.StudentId).ToList();
-                var otherStudents = await GetUsersFromIdAsync(otherStudentIds);
 
                 viewModels.Add(new SchoolClassViewModel
                 {
                     Id = schoolClass.Id,
                     Name = schoolClass.Name,
-                    Teacher = await _userManager.FindByIdAsync(schoolClass.TeacherId),
-                    Students = otherStudents
+                    Teacher = user,
                 });
             }
 
             return View(viewModels);
         }
 
-        // GET: Student/ClassDetails/5
+        // GET: Teacher/ClassDetails/5
         public async Task<IActionResult> ClassDetails(int? id)
         {
             var schoolClass = _context.SchoolClasses.FirstOrDefault(sc => sc.Id == id);
@@ -102,13 +93,12 @@ namespace aspnet_uppgift_1.Controllers
             return View(viewModel);
         }
 
-        /* Placeholders */
-        public IActionResult Grades()
+        public IActionResult Schedule()
         {
             return View();
         }
 
-        public IActionResult Schedule()
+        public IActionResult Grades()
         {
             return View();
         }
@@ -117,11 +107,5 @@ namespace aspnet_uppgift_1.Controllers
         {
             return View();
         }
-
-        public IActionResult Internship()
-        {
-            return View();
-        }
-
     }
 }

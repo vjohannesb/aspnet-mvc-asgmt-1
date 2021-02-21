@@ -8,9 +8,9 @@
 
 @if (Model.Any())
 {
-    @foreach (var item in Model)
-    {
-        <div class="row row-cols-4">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 gx-2 gy-2">
+        @foreach (var item in Model)
+        {
             <div class="col">
                 <div class="card">
                     <div class="card-body">
@@ -19,8 +19,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-    }
+        }
+    </div>
 }
 else
 {

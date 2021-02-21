@@ -6,8 +6,12 @@
         @if (User.IsInRole("Admin"))
         {
             <a asp-action="Edit" asp-route-id="@Model.Id" class="m-2 btn btn-primary">Edit</a>
+            <a asp-action="Index"  class="btn btn-secondary">Back to list</a>
         }
-        <a asp-action="Index"  class="btn btn-secondary">Back to list</a>
+        else
+        {
+            <a asp-action="Classes" class="btn btn-secondary">Back to list</a>
+        }
     </div>
     @if (Model.Teacher == null)
     {
@@ -18,7 +22,7 @@
         <h5>No students enrolled</h5>
     }
 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
         @if (Model.Teacher != null)
         {
             <div class="col mb-3">

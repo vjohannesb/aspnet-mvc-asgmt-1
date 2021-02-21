@@ -1,0 +1,7 @@
+﻿@model aspnet_uppgift_1.Models.SchoolClassViewModel
+
+@{
+    ViewData["Title"] = $"Details ({Model.Name})";
+}
+
+@await Html.PartialAsync("~/Views/Shared/_ClassDetailsPartial.cshtml", Model)

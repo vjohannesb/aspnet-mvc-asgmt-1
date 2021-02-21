@@ -32,6 +32,11 @@
                 </label>
                 @Html.ListBoxFor(m => m.StudentIds, new MultiSelectList(SchoolClassViewModel.AllStudents, "Id", "DisplayName", Model.StudentIds), new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.StudentIds, "", new { @class = "text-danger" })
+
+
+                <p class="alert alert-warning text-wrap">
+                    Selecting a student that is already enrolled in another class will transfer them to the current one.
+                </p>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
