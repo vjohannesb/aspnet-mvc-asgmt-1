@@ -6,24 +6,25 @@
 
 <h1>My classes</h1>
 
-@foreach (var item in Model)
+@if (Model.Any())
 {
-    <div class="row row-cols-4">
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">@item.Name</h5>
-                    <a asp-action="ClassDetails" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
+    @foreach (var item in Model)
+    {
+        <div class="row row-cols-4">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Name</h5>
+                        <a asp-action="ClassDetails" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
+                    </div>
                 </div>
+                <a asp-action="ClassDetails" asp-route-id="@item.Id">
+                </a>
             </div>
-            <a asp-action="ClassDetails" asp-route-id="@item.Id">
-            </a>
         </div>
-        @*<a asp-action="ClassDetails" asp-route-id="@item.Id">
-            @Html.DisplayNameFor(model => model.Name)
-            @Html.DisplayFor(modelItem => item.Name)
-            @Html.DisplayNameFor(model => model.Teacher)
-            @Html.DisplayFor(modelItem => item.Teacher.DisplayName)
-        </a>*@
-    </div>
+    }
+}
+else
+{
+    <p>You are not registered in any classes yet.</p>
 }

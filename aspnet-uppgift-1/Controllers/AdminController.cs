@@ -12,24 +12,31 @@ namespace aspnet_uppgift_1.Controllers
     [Authorize(Policy = "Admins")]
     public class AdminController : Controller
     {
-        private readonly IIdentityService _identityService;
-
-        public AdminController(IIdentityService identityService)
-        {
-            _identityService = identityService;
-        }
-
-
         // GET: AdminController
         public ActionResult Index()
         {
             return View();
         }
 
-        public async Task<ActionResult> Users()
+        /* Placeholders */
+        public ActionResult Settings()
         {
-            var userViewModels = await _identityService.GetAllUserViewModelsAsync();
-            return View(userViewModels);
+            return View();
+        }
+
+        public ActionResult Schedules()
+        {
+            return View();
+        }
+
+        public ActionResult Grades()
+        {
+            return View();
+        }
+
+        public ActionResult Library()
+        {
+            return View();
         }
     }
 }

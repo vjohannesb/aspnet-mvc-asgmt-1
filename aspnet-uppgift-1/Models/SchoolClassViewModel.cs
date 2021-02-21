@@ -16,6 +16,7 @@ namespace aspnet_uppgift_1.Models
         [Required(ErrorMessage = "A class name is required.")]
         public string Name { get; set; }
 
+        // Lärare ej "required" för att inte behöva tilldela lärare direkt
         [Display(Name = "Teacher")]
         public ApplicationUser Teacher { get; set; }
 
@@ -34,17 +35,10 @@ namespace aspnet_uppgift_1.Models
         public static async Task UpdateUserList (UserManager<ApplicationUser> userManager)
         {
             AllTeachers = await userManager.GetUsersInRoleAsync("Teacher");
+            AllTeachers = AllTeachers.OrderBy(user => user.FirstName);
             AllStudents = await userManager.GetUsersInRoleAsync("Student");
+            AllStudents = AllStudents.OrderBy(user => user.FirstName);
         }
 
-        // Explicit omvandling fr. SCVM till SC
-        //public static explicit operator SchoolClass(SchoolClassViewModel scvm)
-        //    => new SchoolClass
-        //    {
-        //        Id = scvm.Id,
-        //        Name = scvm.Name,
-        //        Teacher = scvm.Teacher,
-        //        Students = scvm.Students
-        //    };
     }
 }

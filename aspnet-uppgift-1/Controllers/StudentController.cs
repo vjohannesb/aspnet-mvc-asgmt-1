@@ -1,5 +1,6 @@
 ﻿using aspnet_uppgift_1.Data;
 using aspnet_uppgift_1.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace aspnet_uppgift_1.Controllers
 {
+    [Authorize(Policy = "Users")]
     public class StudentController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -37,6 +39,11 @@ namespace aspnet_uppgift_1.Controllers
                 return _users;
             }
             return null;
+        }
+
+        public IActionResult Index()
+        {
+            return View();
         }
 
         // GET: Student/Classes
@@ -69,9 +76,13 @@ namespace aspnet_uppgift_1.Controllers
         }
 
         // GET: Student/ClassDetails/5
-        public async Task<IActionResult> ClassDetails(int id)
+        public async Task<IActionResult> ClassDetails(int? id)
         {
             var schoolClass = _context.SchoolClasses.FirstOrDefault(sc => sc.Id == id);
+
+            if (schoolClass == null)
+                return RedirectToAction("Classes");
+
             var studentIds = _context.SchoolClassStudents
                 .Where(scs => scs.SchoolClassId == id)
                 .Select(scs => scs.StudentId).ToList();

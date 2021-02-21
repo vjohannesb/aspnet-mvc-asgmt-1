@@ -29,6 +29,8 @@ header {
 #class-list {
     color: black;
     text-align: center;
+    word-wrap: break-word !important;
+    word-wrap: anywhere !important;
 }
 
 #class-list h1 {

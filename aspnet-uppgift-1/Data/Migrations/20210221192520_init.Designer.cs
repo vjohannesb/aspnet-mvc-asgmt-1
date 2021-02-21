@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using aspnet_uppgift_1.Data;
 
-namespace aspnet_uppgift_1.Data.Migrations
+namespace aspnet_uppgift_1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210218095406_init")]
+    [Migration("20210221192520_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -205,8 +205,8 @@ namespace aspnet_uppgift_1.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("SchoolClassId")
-                        .HasColumnType("int");
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -228,8 +228,6 @@ namespace aspnet_uppgift_1.Data.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("SchoolClassId");
-
                     b.ToTable("AspNetUsers");
                 });
 
@@ -244,9 +242,27 @@ namespace aspnet_uppgift_1.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TeacherId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("SchoolClasses");
+                });
+
+            modelBuilder.Entity("aspnet_uppgift_1.Models.SchoolClassStudent", b =>
+                {
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("SchoolClassId")
+                        .HasColumnType("int");
+
+                    b.HasKey("StudentId");
+
+                    b.HasIndex("SchoolClassId");
+
+                    b.ToTable("SchoolClassStudents");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -300,18 +316,20 @@ namespace aspnet_uppgift_1.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("aspnet_uppgift_1.Data.ApplicationUser", b =>
+            modelBuilder.Entity("aspnet_uppgift_1.Models.SchoolClassStudent", b =>
                 {
                     b.HasOne("aspnet_uppgift_1.Models.SchoolClass", "SchoolClass")
-                        .WithMany("Users")
-                        .HasForeignKey("SchoolClassId");
+                        .WithMany("SchoolClassStudents")
+                        .HasForeignKey("SchoolClassId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("SchoolClass");
                 });
 
             modelBuilder.Entity("aspnet_uppgift_1.Models.SchoolClass", b =>
                 {
-                    b.Navigation("Users");
+                    b.Navigation("SchoolClassStudents");
                 });
 #pragma warning restore 612, 618
         }

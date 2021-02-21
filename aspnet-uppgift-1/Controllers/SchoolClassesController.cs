@@ -19,7 +19,6 @@ namespace aspnet_uppgift_1.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-
         public SchoolClassesController(
             ApplicationDbContext context, 
             UserManager<ApplicationUser> userManager, 
@@ -74,12 +73,13 @@ namespace aspnet_uppgift_1.Controllers
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
-                return NotFound();
+                return RedirectToAction("Index");
 
             var schoolClass = await _context.SchoolClasses
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (schoolClass == null)
-                return NotFound();
+                return RedirectToAction("Index");
 
             var enrolledStudentIds = _context.SchoolClassStudents
                 .Where(scs => scs.SchoolClassId == id)
@@ -129,12 +129,12 @@ namespace aspnet_uppgift_1.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
-                return NotFound();
+                return RedirectToAction("Index");
 
             var schoolClass = await _context.SchoolClasses.FindAsync(id);
 
             if (schoolClass == null)
-                return NotFound();
+                return RedirectToAction("Index");
 
             var enrolledStudentIds = _context.SchoolClassStudents
                 .Where(scs => scs.SchoolClassId == schoolClass.Id)
@@ -162,11 +162,11 @@ namespace aspnet_uppgift_1.Controllers
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StudentIds,TeacherId")] SchoolClassViewModel viewModel)
         {
             if (id != viewModel.Id)
-                return NotFound();
+                return RedirectToAction("Index");
 
             if (ModelState.IsValid)
             {
-                // Uppdatera tabellen SchoolClass
+                // Uppdatera tabell (SchoolClass)
                 var schoolClass = new SchoolClass
                 {
                     Id = id,
@@ -188,7 +188,7 @@ namespace aspnet_uppgift_1.Controllers
                 }
 
 
-                // Uppdatera relation (tabellen SchoolClassStudents)
+                // Uppdatera relation (SchoolClassStudents)
                 var oldStudentList = await _context.SchoolClassStudents
                     .Where(scs => scs.SchoolClassId == id).ToListAsync();
 
@@ -243,12 +243,12 @@ namespace aspnet_uppgift_1.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
-                return NotFound();
+                return RedirectToAction("Index");
 
             var schoolClass = await _context.SchoolClasses
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (schoolClass == null)
-                return NotFound();
+                return RedirectToAction("Index");
 
             var enrolledStudentIds = await _context.SchoolClassStudents
                 .Where(scs => scs.SchoolClassId == id)
@@ -291,10 +291,5 @@ namespace aspnet_uppgift_1.Controllers
         {
             return _context.SchoolClassStudents.Any(e => e.StudentId == id);
         }
-
-        //private bool SchoolClassStudentRemoved(string id)
-        //{
-        //    return !_context.
-        //}
     }
 }

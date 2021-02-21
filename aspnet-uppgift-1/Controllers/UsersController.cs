@@ -1,6 +1,7 @@
 ﻿using aspnet_uppgift_1.Data;
 using aspnet_uppgift_1.Models;
 using aspnet_uppgift_1.Services.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace aspnet_uppgift_1.Controllers
 {
+    [Authorize(Policy = "Admins")]
     public class UsersController : Controller
     {
         private readonly IIdentityService _identityService;
@@ -36,6 +38,10 @@ namespace aspnet_uppgift_1.Controllers
         public async Task<UserViewModel> GetUserViewModelAsync(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+                return null;
+
             var roles = await _userManager.GetRolesAsync(user);
 
             var userViewModel = (UserViewModel)user;
@@ -77,6 +83,10 @@ namespace aspnet_uppgift_1.Controllers
         public async Task<ActionResult> Details(string id)
         {
             var userViewModel = await GetUserViewModelAsync(id);
+
+            if (userViewModel == null)
+                return RedirectToAction("Index");
+
             if (userViewModel.Role == "Student")
             {
                 var classId = _context.SchoolClassStudents
@@ -127,6 +137,9 @@ namespace aspnet_uppgift_1.Controllers
         public async Task<ActionResult> Edit(string id)
         {
             var userViewModel = await GetUserViewModelAsync(id);
+            if (userViewModel == null)
+                return RedirectToAction("Index");
+
             ViewBag.Roles = _roleManager.Roles as IEnumerable<IdentityRole>;
             return View(userViewModel);
         }
@@ -174,6 +187,9 @@ namespace aspnet_uppgift_1.Controllers
         public async Task<ActionResult> Delete(string id)
         {
             var userViewModel = await GetUserViewModelAsync(id);
+            if (userViewModel == null)
+                return RedirectToAction("Index");
+
             return View(userViewModel);
         }
 

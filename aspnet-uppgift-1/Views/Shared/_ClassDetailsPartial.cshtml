@@ -7,6 +7,7 @@
         {
             <a asp-action="Edit" asp-route-id="@Model.Id" class="m-2 btn btn-primary">Edit</a>
         }
+        <a asp-action="Index"  class="btn btn-secondary">Back to list</a>
     </div>
     @if (Model.Teacher == null)
     {
@@ -26,9 +27,7 @@
                     <div class="user-card-box">
                         <h5>@Model.Teacher.DisplayName</h5>
                         <p class="user-role">@Model.Teacher.Role</p>
-                        <p class="user-company">
-                            @Model.Name
-                        </p>
+                        <p class="user-company">@Model.Name</p>
                     </div>
                     <div class="blob"></div>
                 </div>
@@ -42,9 +41,7 @@
                         <div class="user-card-box">
                             <h5>@student.DisplayName</h5>
                             <p class="user-role">@student.Role</p>
-                            <p class="user-company">
-                                @Model.Name
-                            </p>
+                            <p class="user-company">@Model.Name</p>
                         </div>
                         <div class="blob"></div>
                     </div>
